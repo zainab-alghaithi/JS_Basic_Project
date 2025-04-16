@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic JavaScript Practice II</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        input, textarea, button {
+            font-size: 16px;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        input, textarea {
+            width: 80%;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Basic JavaScript Practice II</h1>
+        
+        <!-- Reverse an Array -->
+        <div class="section">
+            <h2>Reverse an Array</h2>
+            <input type="text" id="reverseInput" placeholder="Enter numbers separated by commas">
+            <button onclick="doReverse()">Reverse Array</button>
+            <pre id="reverseOutput"></pre>
+        </div>
+        
+        <!-- Filter Positive Numbers -->
+        <div class="section">
+            <h2>Filter Positive Numbers</h2>
+            <input type="text" id="filterInput" placeholder="Enter numbers separated by commas">
+            <button onclick="doFilterPositive()">Filter Positive</button>
+            <pre id="filterOutput"></pre>
+        </div>
+        
+        <!-- Sum of Array Elements -->
+        <div class="section">
+            <h2>Sum of Array Elements</h2>
+            <input type="text" id="sumInput" placeholder="Enter numbers separated by commas">
+            <button onclick="doSumArray()">Sum Array</button>
+            <pre id="sumOutput"></pre>
+        </div>
+        
+        <!-- Count Word Occurrences -->
+        <div class="section">
+            <h2>Count Word Occurrences</h2>
+            <textarea id="wordInput" placeholder="Enter a sentence" rows="3"></textarea>
+            <button onclick="doCountWords()">Count Words</button>
+            <pre id="wordCountOutput"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Reverse an Array:
+        // Returns a new array that is the reverse of the given array.
+        function reverseArray(arr) {
+            return arr.slice().reverse();
+        }
+        
+        // Filter Positive Numbers:
+        // Returns a new array containing only the positive numbers from the given array.
+        function filterPositive(arr) {
+            return arr.filter(num => num > 0);
+        }
+        
+        // Sum of Array Elements:
+        // Returns the total sum of all numbers in the given array.
+        function sumArray(arr) {
+            return arr.reduce((acc, cur) => acc + cur, 0);
+        }
+        
+        // Count Word Occurrences:
+        // Returns an object where keys are words and values are the count of occurrences.
+        function countWords(str) {
+            const words = str.split(/\s+/);
+            const counts = {};
+            for (const word of words) {
+                // Normalize word: make lowercase and remove non-alphanumeric characters.
+                const normalized = word.toLowerCase().replace(/[^\w]/g, '');
+                if (normalized) {
+                    counts[normalized] = (counts[normalized] || 0) + 1;
+                }
+            }
+            return counts;
+        }
+        
+        // Helper functions to get user inputs and display outputs:
+        
+        function doReverse() {
+            const input = document.getElementById('reverseInput').value;
+            const arr = input.split(',').map(item => parseFloat(item.trim())).filter(num => !isNaN(num));
+            const result = reverseArray(arr);
+            document.getElementById('reverseOutput').innerText = 
+                "Original array: " + JSON.stringify(arr) +
+                "\nReversed array: " + JSON.stringify(result);
+        }
+        
+        function doFilterPositive() {
+            const input = document.getElementById('filterInput').value;
+            const arr = input.split(',').map(item => parseFloat(item.trim())).filter(num => !isNaN(num));
+            const result = filterPositive(arr);
+            document.getElementById('filterOutput').innerText = 
+                "Original array: " + JSON.stringify(arr) +
+                "\nPositive numbers: " + JSON.stringify(result);
+        }
+        
+        function doSumArray() {
+            const input = document.getElementById('sumInput').value;
+            const arr = input.split(',').map(item => parseFloat(item.trim())).filter(num => !isNaN(num));
+            const result = sumArray(arr);
+            document.getElementById('sumOutput').innerText =
+                "Array: " + JSON.stringify(arr) +
+                "\nSum: " + result;
+        }
+        
+        function doCountWords() {
+            const sentence = document.getElementById('wordInput').value;
+            const result = countWords(sentence);
+            document.getElementById('wordCountOutput').innerText =
+                "Sentence: \"" + sentence + "\"" +
+                "\nWord Occurrences: " + JSON.stringify(result, null, 2);
+        }
+    </script>
+</body>
+</html>
