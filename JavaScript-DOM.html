@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive DOM Tasks</title>
+  <style>
+    body { background: #f7f5f2; font-family: Georgia, serif; padding: 20px; }
+    .container { background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 30px; max-width: 800px; margin: 20px auto; box-shadow: 0 0 12px rgba(0,0,0,0.1); }
+    h1 { color: #5d5c61; font-size: 32px; margin-bottom: 20px; }
+    p { font-size: 18px; line-height: 1.5; }
+    button { padding: 10px 20px; font-size: 16px; background: #a8dadc; color: #1d3557; border: none; border-radius: 5px; margin: 8px 5px; transition: 0.3s; }
+    button:hover { background: #457b9d; color: #fff; }
+    ul { padding-left: 20px; margin: 15px 0; }
+    li { font-size: 16px; color: #5d5c61; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="mainHeading">Welcome to my page!</h1>
+    <button onclick="changeHeading()">Change Heading Text</button>
+
+    <div id="colorDiv" style="margin:20px 0; padding:20px; border:1px solid #dcdcdc;">
+      <p>This is a refined container.</p>
+    </div>
+    <button onclick="changeDivColor()">Change Container Background</button>
+
+    <p id="togglePara">Please toggle my visibility.</p>
+    <button onclick="toggleParagraph()">Show/Hide Paragraph</button>
+
+    <ul id="itemList">
+      <li>Existing Item</li>
+    </ul>
+    <button onclick="addListItem()">Add List Item</button>
+
+    <p id="removeMe">Remove this element with a click.</p>
+    <button onclick="removeElement()">Remove Element</button>
+  </div>
+
+  <script>
+    function changeHeading() {
+        const heading = document.getElementById("mainHeading");
+        heading.innerText = (heading.innerText === "Welcome to my page!")
+            ? "Hello world!"
+            : "Welcome to my page!";
+        console.log("The heading has been updated. Current heading: " + heading.innerText);
+    }
+    
+    function changeDivColor() {
+        const div = document.getElementById("colorDiv");
+        // Toggle between two pastel colors.
+        div.style.backgroundColor = (div.style.backgroundColor === "lavender")
+            ? "#f5f5fa"
+            : "lavender";
+        console.log("The background color of the container has been updated to: " + div.style.backgroundColor);
+    }
+    
+    function toggleParagraph() {
+        const para = document.getElementById("togglePara");
+        para.style.display = (para.style.display === "none") ? "block" : "none";
+        console.log("The paragraph's visibility has been toggled. Current state: " + (para.style.display === "none" ? "Hidden" : "Visible"));
+    }
+    
+    function addListItem() {
+        const ul = document.getElementById("itemList");
+        const li = document.createElement("li");
+        li.innerText = "New Elegant Item";
+        ul.appendChild(li);
+        console.log("A new list item has been appended to the list.");
+    }
+    
+    function removeElement() {
+        const elem = document.getElementById("removeMe");
+        if (elem) {
+            elem.parentNode.removeChild(elem);
+            console.log("The specified element has been removed from the document.");
+        } else {
+            console.log("The specified element has already been removed.");
+        }
+    }
+  </script>
+</body>
+</html>
