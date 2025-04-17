@@ -19,9 +19,12 @@
         }
         h1 {
             color: #333;
+            text-align: center;
         }
+        input[type="text"],
         input[type="number"],
-        input[type="text"] {
+        input[type="password"],
+        select {
             width: 60%;
             padding: 8px;
             margin: 10px 0;
@@ -54,57 +57,171 @@
 <body>
     <div class="container">
         <h1>JavaScript Callback Practice</h1>
+        
+        <!-- 1. Greet User Section -->
+        <div class="section" id="greetSection">
+            <h2>Greet User</h2>
+            <input type="text" id="greetInput" placeholder="Enter your name">
+            <button id="greetBtn">Greet</button>
+            <p id="greetOutput"></p>
+        </div>
+        
+        <!-- 2. Calculate Section -->
+        <div class="section" id="calcSection">
+            <h2>Calculate</h2>
+            <input type="number" id="calcA" placeholder="Enter first number">
+            <input type="number" id="calcB" placeholder="Enter second number">
+            <select id="calcOperation">
+                <option value="add">Addition</option>
+                <option value="sub">Subtraction</option>
+                <option value="mul">Multiplication</option>
+                <option value="div">Division</option>
+            </select>
+            <button id="calcBtn">Calculate</button>
+            <p id="calcOutput"></p>
+        </div>
+        
+        <!-- 3. Process Array Section -->
+        <div class="section" id="processArraySection">
+            <h2>Process Array</h2>
+            <input type="text" id="arrayInput" placeholder="Enter comma-separated values">
+            <select id="processType">
+                <option value="double">Double Numbers</option>
+                <option value="upper">Uppercase Strings</option>
+            </select>
+            <button id="processArrayBtn">Process Array</button>
+            <p id="processArrayOutput"></p>
+        </div>
+        
+        <!-- 4. Get Data Section -->
+        <div class="section" id="getDataSection">
+            <h2>Get Data (Async)</h2>
+            <button id="getDataBtn">Get Data</button>
+            <p id="getDataOutput"></p>
+        </div>
+        
+        <!-- 5. Login Section -->
+        <div class="section" id="loginSection">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button id="loginBtn">Login</button>
+            <p id="loginOutput"></p>
+        </div>
+        
+        <!-- 6. Divide Section -->
+        <div class="section" id="divideSection">
+            <h2>Divide Numbers</h2>
+            <input type="number" id="divA" placeholder="Number A">
+            <input type="number" id="divB" placeholder="Number B">
+            <button id="divideBtn">Divide</button>
+            <p id="divideOutput"></p>
+        </div>
+        
     </div>
+    
     <script>
-        function greet(name, callback) {
-            callback(name);
+        // 1. Greet User: Instead of using a callback to log, update the DOM.
+        function greet(name) {
+            return `Hello, ${name}!`;
         }
-        greet("Alice", name => console.log(`Hello, ${name}!`));
-
+        document.getElementById('greetBtn').addEventListener('click', () => {
+            const name = document.getElementById('greetInput').value;
+            const message = greet(name);
+            document.getElementById('greetOutput').innerText = message;
+        });
+        
+        // 2. Calculate: Perform operations based on input and update the DOM.
         function calculate(a, b, operation) {
-            return operation(a, b);
+            switch(operation) {
+                case "add": return a + b;
+                case "sub": return a - b;
+                case "mul": return a * b;
+                case "div": return b !== 0 ? a / b : "Error: Division by zero";
+                default: return "Invalid operation";
+            }
         }
-        console.log("Addition:", calculate(5,3, (a,b) => a + b));
-        console.log("Subtraction:", calculate(5,3, (a,b) => a - b));
-        console.log("Multiplication:", calculate(5,3, (a,b) => a * b));
-        console.log("Division:", calculate(5,3, (a,b) => a / b));
-
-        function processArray(arr, callback) {
-            return arr.map(callback);
+        document.getElementById('calcBtn').addEventListener('click', () => {
+            const a = parseFloat(document.getElementById('calcA').value);
+            const b = parseFloat(document.getElementById('calcB').value);
+            const op = document.getElementById('calcOperation').value;
+            const result = calculate(a, b, op);
+            document.getElementById('calcOutput').innerText = "Result: " + result;
+        });
+        
+        // 3. Process Array: Take comma-separated values input, process, and display output.
+        function processArray(arr, type) {
+            if(type === "double") {
+                return arr.map(n => Number(n) * 2);
+            } else if(type === "upper") {
+                return arr.map(s => s.toUpperCase());
+            }
         }
-        console.log("Doubled:", processArray([1,2,3], n => n * 2));
-        console.log("Uppercase:", processArray(["apple","banana","cherry"], s => s.toUpperCase()));
-
-        function getData(callback) {
+        document.getElementById('processArrayBtn').addEventListener('click', () => {
+            const input = document.getElementById('arrayInput').value;
+            const arr = input.split(',').map(item => item.trim());
+            const type = document.getElementById('processType').value;
+            const output = processArray(arr, type);
+            document.getElementById('processArrayOutput').innerText = "Output: " + output;
+        });
+        
+        // 4. Get Data: Simulate an asynchronous data fetch, then update the DOM.
+        function getData() {
             const data = { id: 1, name: "John Doe", age: 30 };
-            setTimeout(() => callback(data), 1000);
+            return new Promise(resolve => {
+                setTimeout(() => resolve(data), 1000);
+            });
         }
-        getData(data => console.log("Received:", data));
-
-        function login(username, password, callback) {
-            setTimeout(() => callback({ userId: 1, username }), 1000);
-        }
-        function fetchUser(user, callback) {
-            setTimeout(() => callback({ ...user, fullName: "Alice Johnson" }), 1000);
-        }
-        function fetchSettings(user, callback) {
-            setTimeout(() => callback({ theme: "dark", language: "en" }), 1000);
-        }
-        login("Alice", "password123", user => {
-            console.log("Logged in:", user);
-            fetchUser(user, userDetails => {
-                console.log("User details:", userDetails);
-                fetchSettings(userDetails, settings => {
-                    console.log("User settings:", settings);
-                });
+        document.getElementById('getDataBtn').addEventListener('click', () => {
+            getData().then(data => {
+                document.getElementById('getDataOutput').innerText = "Received: " + JSON.stringify(data);
             });
         });
-
-        function divide(a, b, successCallback, errorCallback) {
-            b === 0 ? errorCallback("Error: Division by zero") : successCallback(a / b);
+        
+        // 5. Login: Simulate a login flow chained with async user and settings fetch, then update the DOM.
+        function login(username, password) {
+            return new Promise(resolve => {
+                setTimeout(() => resolve({ userId: 1, username }), 1000);
+            });
         }
-        divide(10, 2, result => console.log("Result:", result), error => console.log(error));
-        divide(10, 0, result => console.log("Result:", result), error => console.log(error));
+        function fetchUser(user) {
+            return new Promise(resolve => {
+                setTimeout(() => resolve({ ...user, fullName: "Alice Johnson" }), 1000);
+            });
+        }
+        function fetchSettings(user) {
+            return new Promise(resolve => {
+                setTimeout(() => resolve({ theme: "dark", language: "en" }), 1000);
+            });
+        }
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            login(username, password)
+                .then(user => fetchUser(user))
+                .then(userDetails => fetchSettings(userDetails).then(settings => ({ userDetails, settings })))
+                .then(result => {
+                    document.getElementById('loginOutput').innerText = "Logged in: " + JSON.stringify(result);
+                });
+        });
+        
+        // 6. Divide: Perform division and update the DOM with either the result or an error message.
+        function divide(a, b, successCallback, errorCallback) {
+            if(b === 0) {
+                errorCallback("Error: Division by zero");
+            } else {
+                successCallback(a / b);
+            }
+        }
+        document.getElementById('divideBtn').addEventListener('click', () => {
+            const a = parseFloat(document.getElementById('divA').value);
+            const b = parseFloat(document.getElementById('divB').value);
+            divide(a, b, result => {
+                document.getElementById('divideOutput').innerText = "Result: " + result;
+            }, error => {
+                document.getElementById('divideOutput').innerText = error;
+            });
+        });
     </script>
 </body>
 </html>
