@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modern Interactive DOM</title>
+  <style>
+    /* Modern theme: Pink, Black, and White */
+    body { 
+      background: #ffffff; /* White background */
+      font-family: 'Segoe UI', sans-serif; 
+      padding: 20px; 
+      margin: 0;
+      color: #000; /* Black text */
+    }
+    .container { 
+      background: #ffffff;
+      border: 2px solid #ff66b2; /* Vibrant pink border */
+      border-radius: 10px; 
+      padding: 30px; 
+      max-width: 700px; 
+      margin: 40px auto; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1, h2 { 
+      font-size: 36px; 
+      margin-bottom: 20px; 
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+    button { 
+      background: #ff66b2; /* Pink */
+      border: none; 
+      color: #fff; 
+      padding: 10px 16px; 
+      font-size: 16px; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      transition: background-color 0.3s ease; 
+      margin: 8px 4px;
+    }
+    button:hover { 
+      background: #e60073; 
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    textarea {
+      padding: 10px; 
+      border: 2px solid #ff66b2; 
+      border-radius: 4px; 
+      font-size: 16px; 
+      width: 100%;
+      box-sizing: border-box;
+      margin: 5px 0;
+    }
+    input[type="color"] {
+      padding: 0;
+      border: none;
+      width: 50px;
+      height: 40px;
+      cursor: pointer;
+    }
+    img { 
+      max-width: 100%; 
+      border: 2px solid #000; 
+      border-radius: 4px; 
+    }
+    hr { 
+      border: none; 
+      border-top: 1px solid #ddd; 
+      margin: 20px 0; 
+    }
+    .output { 
+      margin-top: 10px; 
+      padding: 10px; 
+      border: 1px solid #ddd; 
+      background: #fff; 
+      border-radius: 4px;
+    }
+    ul { 
+      list-style: none;
+      padding: 0;
+    }
+    li { 
+      padding: 5px 0;
+      font-size: 18px;
+      color: #444;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="mainHeading">Original Title</h1>
+    <button onclick="changePageTitle()">Change Title</button>
+    
+    <hr>
+    
+    <img id="myImage" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/c8f032171697641.6473555ac25ee.jpg" alt="Old Alt">
+    <button onclick="changeImageAlt()">Change Image Alt</button>
+    
+    <hr>
+    
+    <button id="selfButton" onclick="changeButtonText(this)">Click Me</button>
+    
+    <hr>
+    
+    <p id="toggleFont" style="font-size:18px;">Toggle my font size</p>
+    <button onclick="toggleFontSize()">Toggle Font Size</button>
+    
+    <hr>
+    
+    <p>Counter: <span id="counterDisplay">0</span></p>
+    <button onclick="updateCounter()">Increase Counter</button>
+    
+    <hr>
+    
+    <button id="disableButton" onclick="disableThisButton(this)">Disable Me</button>
+    
+    <hr>
+    
+    <input type="text" id="nameInput" placeholder="Focus here" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+    
+    <hr>
+    
+    <input type="text" id="alertInput" placeholder="Type something">
+    <button onclick="alertInputValue()">Alert Input</button>
+    
+    <hr>
+    
+    <button onclick="changeBackgroundColor('pink')">Pink</button>
+    <button onclick="changeBackgroundColor('black')">Black</button>
+    <button onclick="changeBackgroundColor('white')">White</button>
+    
+    <hr>
+    <!-- Additional Features -->
+    
+    <!-- 10. Highlight List Items -->
+    <section>
+      <h2>Highlight List Items</h2>
+      <ul id="highlightList">
+        <li>Item One</li>
+        <li>Item Two</li>
+        <li>Item Three</li>
+      </ul>
+    </section>
+    
+    <hr>
+    <!-- 11. Show/Hide Password -->
+    <section>
+      <h2>Show/Hide Password</h2>
+      <input type="password" id="passwordInput" placeholder="Enter Password">
+      <label>
+        <input type="checkbox" id="togglePassword"> Show Password
+      </label>
+    </section>
+    
+    <hr>
+    <!-- 12. Pre-fill Input Field -->
+    <section>
+      <h2>Pre-fill Input Field</h2>
+      <input type="text" id="prefillInput">
+    </section>
+    
+    <hr>
+    <!-- 13. Uppercase Converter -->
+    <section>
+      <h2>Uppercase Converter</h2>
+      <input type="text" id="uppercaseInput" placeholder="Type Something">
+      <p id="uppercaseOutput"></p>
+    </section>
+    
+    <hr>
+    <!-- 14. Simple Color Picker -->
+    <section>
+      <h2>Simple Color Picker</h2>
+      <input type="color" id="colorPicker">
+      <div id="colorBox" style="width: 100%; height: 100px; border: 1px solid #ccc; margin-top: 10px;"></div>
+    </section>
+    
+    <hr>
+    <!-- 15. Reset Page Content -->
+    <section>
+      <h2>Reset Page Content</h2>
+      <button id="resetButton">Reset Section</button>
+      <div id="resetArea" class="output" contenteditable="true">
+        <p>This is the reset area. Change content here and then reset.</p>
+      </div>
+    </section>
+  </div>
+  
+  <script>
+ function changePageTitle() {
+    document.title = (document.title === "Welcome to my page!")
+      ? "Hello world!"
+      : "Welcome to my page!";
+    console.log("The page title has been updated. Current title: " + document.title);
+  }
+    function changeImageAlt() {
+      const img = document.getElementById("myImage");
+      img.alt = "New descriptive alt text";
+      console.log("Image alt updated to: " + img.alt);
+    }
+    function changeButtonText(btn) {
+      btn.innerText = "Clicked!";
+      console.log("Button text changed.");
+    }
+    function toggleFontSize() {
+      const para = document.getElementById("toggleFont");
+      const currentSize = window.getComputedStyle(para).fontSize;
+      para.style.fontSize = (currentSize === "18px") ? "24px" : "18px";
+      console.log("Font size toggled to: " + para.style.fontSize);
+    }
+    let counter = 0;
+    function updateCounter() {
+      counter++;
+      document.getElementById("counterDisplay").innerText = counter;
+      console.log("Counter increased to: " + counter);
+    }
+    function disableThisButton(btn) {
+      btn.disabled = true;
+      console.log("Button disabled.");
+    }
+    function inputFocus(elem) {
+      elem.style.borderColor = "#ff66b2";
+      console.log("Input focused; border color changed.");
+    }
+    function inputBlur(elem) {
+      elem.style.borderColor = "#ff66b2";
+      console.log("Input blurred; border color reset.");
+    }
+    function alertInputValue() {
+      const val = document.getElementById("alertInput").value;
+      alert("You typed: " + val);
+      console.log("Alerted input value: " + val);
+    }
+    function changeBackgroundColor(color) {
+      document.body.style.backgroundColor = color;
+      console.log("Background color changed to: " + color);
+    }
+    
+    // ---------- Additional Features ----------
+    
+    // 10. Highlight List Items: Toggle background color when an <li> is clicked.
+    const highlightList = document.getElementById("highlightList");
+    highlightList.addEventListener("click", (e) => {
+      if(e.target && e.target.nodeName === "LI"){
+        // Toggle highlight (yellow)
+        e.target.style.backgroundColor = (e.target.style.backgroundColor === "yellow") ? "" : "yellow";
+      }
+    });
+    
+    // 11. Show/Hide Password: Toggle input type on checkbox change.
+    const togglePassword = document.getElementById("togglePassword");
+    togglePassword.addEventListener("change", () => {
+      const pwdInput = document.getElementById("passwordInput");
+      pwdInput.type = togglePassword.checked ? "text" : "password";
+    });
+    
+    // 12. Pre-fill Input Field: Set a default value when page loads.
+    window.addEventListener("load", () => {
+      document.getElementById("prefillInput").value = "Default Value";
+    });
+    
+    // 13. Uppercase Converter: Convert input text to uppercase and show in a paragraph.
+    const uppercaseInput = document.getElementById("uppercaseInput");
+    const uppercaseOutput = document.getElementById("uppercaseOutput");
+    uppercaseInput.addEventListener("input", () => {
+      uppercaseOutput.innerText = uppercaseInput.value.toUpperCase();
+    });
+    
+    // 14. Simple Color Picker: Change background-color of a box based on selected color.
+    const colorPicker = document.getElementById("colorPicker");
+    const colorBox = document.getElementById("colorBox");
+    colorPicker.addEventListener("input", () => {
+      colorBox.style.backgroundColor = colorPicker.value;
+    });
+    
+    // 15. Reset Page Content: Reset a section's content to its original state.
+    const resetButton = document.getElementById("resetButton");
+    resetButton.addEventListener("click", () => {
+      const resetArea = document.getElementById("resetArea");
+      resetArea.innerHTML = `<p>This is the reset area. Change content here and then reset.</p>`;
+    });
+  </script>
+</body>
+</html>
